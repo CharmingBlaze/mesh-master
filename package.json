@@ -1,6 +1,6 @@
 {
   "name": "mesh-master",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A framework-agnostic, headless library for 3D mesh editing operations",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
