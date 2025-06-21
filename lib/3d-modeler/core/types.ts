@@ -1,7 +1,7 @@
 // Core type definitions for the 3D Modeler Library
 export type TransformMode = "translate" | "rotate" | "scale"
 export type EditMode = "object" | "vertex" | "edge" | "face"
-export type ObjectType = "box" | "sphere" | "cylinder" | "plane" | "cone" | "torus" | "custom"
+export type ObjectType = "box" | "sphere" | "cylinder" | "plane" | "cone" | "pyramid" | "prism" | "torus" | "helix" | "custom"
 
 export interface Vector3 {
   x: number

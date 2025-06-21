@@ -51,8 +51,8 @@ export function smoothMesh(
   const isFeatureVertex = new Set<ID>();
 
   // First pass: identify boundary vertices and compute neighborhoods
-  const vertices = Array.from(mesh.getVertices());
-  const edges = Array.from(mesh.getEdges());
+    const vertices = Array.from(mesh.getVertices());
+    const edges = Array.from(mesh.getEdges());
   const faces = Array.from(mesh.getFaces());
 
   // Identify boundary vertices
@@ -120,27 +120,28 @@ export function smoothMesh(
   // Compute neighborhoods and weights
   for (const vertex of vertices) {
     const neighbors: { id: ID; weight: number }[] = [];
-    for (const edge of edges) {
-      let neighborId: ID | null = null;
-      if (edge.vertexIds[0] === vertex.id) {
-        neighborId = edge.vertexIds[1];
-      } else if (edge.vertexIds[1] === vertex.id) {
-        neighborId = edge.vertexIds[0];
-      }
+      for (const edge of edges) {
+        let neighborId: ID | null = null;
+        if (edge.vertexIds[0] === vertex.id) {
+          neighborId = edge.vertexIds[1];
+        } else if (edge.vertexIds[1] === vertex.id) {
+          neighborId = edge.vertexIds[0];
+        }
 
-      if (neighborId !== null) {
-        const neighborVertex = mesh.getVertex(neighborId);
-        if (neighborVertex) {
+        if (neighborId !== null) {
+          const neighborVertex = mesh.getVertex(neighborId);
+          if (neighborVertex) {
           const weight = useWeights ? 1 / distance(vertex.position, neighborVertex.position) : 1;
           neighbors.push({ id: neighborId, weight });
+          }
         }
       }
-    }
     vertexNeighbors.set(vertex.id, neighbors);
   }
 
   // Perform smoothing iterations
   for (let iter = 0; iter < iterations; iter++) {
+    const vertices = Array.from(mesh.getVertices());
     const newPositions = new Map<ID, Vector3>();
 
     for (const vertex of vertices) {

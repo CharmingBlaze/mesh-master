@@ -344,3 +344,273 @@ export function createPlaneGeometry(
   console.log(`Plane geometry created: ${vertices.length} vertices, ${edges.length} edges, ${faces.length} faces`)
   return { vertices, edges, faces }
 }
+
+export function createPyramidGeometry(
+  baseRadius = 0.5,
+  height = 1,
+  baseSegments = 3,
+): { vertices: Vertex[]; edges: Edge[]; faces: Face[] } {
+  console.log(`Creating pyramid geometry: baseRadius=${baseRadius}, height=${height}, segments=${baseSegments}`)
+
+  const vertices: Vertex[] = []
+  const faces: Face[] = []
+
+  // Create base vertices
+  for (let i = 0; i < baseSegments; i++) {
+    const angle = (i / baseSegments) * Math.PI * 2
+    const x = baseRadius * Math.cos(angle)
+    const z = baseRadius * Math.sin(angle)
+    
+    vertices.push({
+      id: generateId(),
+      position: { x, y: -height / 2, z },
+      selected: false,
+    })
+  }
+
+  // Create apex vertex
+  const apex = {
+    id: generateId(),
+    position: { x: 0, y: height / 2, z: 0 },
+    selected: false,
+  }
+  vertices.push(apex)
+
+  // Create base face
+  const baseFace: number[] = []
+  for (let i = 0; i < baseSegments; i++) {
+    baseFace.push(vertices[i].id)
+  }
+  faces.push({
+    id: generateId(),
+    vertexIds: baseFace,
+    selected: false,
+  })
+
+  // Create triangular side faces
+  for (let i = 0; i < baseSegments; i++) {
+    const v1 = vertices[i].id
+    const v2 = vertices[(i + 1) % baseSegments].id
+    
+    faces.push({
+      id: generateId(),
+      vertexIds: [v1, v2, apex.id],
+      selected: false,
+    })
+  }
+
+  // Calculate normals for faces
+  faces.forEach((face) => {
+    face.normal = calculateFaceNormal(vertices, face)
+  })
+
+  const edges = generateEdgesFromFaces(vertices, faces)
+
+  console.log(`Pyramid geometry created: ${vertices.length} vertices, ${edges.length} edges, ${faces.length} faces`)
+  return { vertices, edges, faces }
+}
+
+export function createPrismGeometry(
+  baseRadius = 0.5,
+  height = 1,
+  baseSegments = 6,
+): { vertices: Vertex[]; edges: Edge[]; faces: Face[] } {
+  console.log(`Creating prism geometry: baseRadius=${baseRadius}, height=${height}, segments=${baseSegments}`)
+
+  const vertices: Vertex[] = []
+  const faces: Face[] = []
+  const halfHeight = height / 2
+
+  // Create bottom base vertices
+  for (let i = 0; i < baseSegments; i++) {
+    const angle = (i / baseSegments) * Math.PI * 2
+    const x = baseRadius * Math.cos(angle)
+    const z = baseRadius * Math.sin(angle)
+    
+    vertices.push({
+      id: generateId(),
+      position: { x, y: -halfHeight, z },
+      selected: false,
+    })
+  }
+
+  // Create top base vertices
+  for (let i = 0; i < baseSegments; i++) {
+    const angle = (i / baseSegments) * Math.PI * 2
+    const x = baseRadius * Math.cos(angle)
+    const z = baseRadius * Math.sin(angle)
+    
+    vertices.push({
+      id: generateId(),
+      position: { x, y: halfHeight, z },
+      selected: false,
+    })
+  }
+
+  // Create bottom base face
+  const bottomFace: number[] = []
+  for (let i = 0; i < baseSegments; i++) {
+    bottomFace.push(vertices[i].id)
+  }
+  faces.push({
+    id: generateId(),
+    vertexIds: bottomFace,
+    selected: false,
+  })
+
+  // Create top base face
+  const topFace: number[] = []
+  for (let i = 0; i < baseSegments; i++) {
+    topFace.push(vertices[baseSegments + i].id)
+  }
+  faces.push({
+    id: generateId(),
+    vertexIds: topFace,
+    selected: false,
+  })
+
+  // Create side faces (quads)
+  for (let i = 0; i < baseSegments; i++) {
+    const v1 = vertices[i].id
+    const v2 = vertices[(i + 1) % baseSegments].id
+    const v3 = vertices[baseSegments + (i + 1) % baseSegments].id
+    const v4 = vertices[baseSegments + i].id
+    
+    faces.push({
+      id: generateId(),
+      vertexIds: [v1, v2, v3, v4],
+      selected: false,
+    })
+  }
+
+  // Calculate normals for faces
+  faces.forEach((face) => {
+    face.normal = calculateFaceNormal(vertices, face)
+  })
+
+  const edges = generateEdgesFromFaces(vertices, faces)
+
+  console.log(`Prism geometry created: ${vertices.length} vertices, ${edges.length} edges, ${faces.length} faces`)
+  return { vertices, edges, faces }
+}
+
+export function createTorusGeometry(
+  radius = 0.5,
+  tubeRadius = 0.2,
+  radialSegments = 16,
+  tubularSegments = 32,
+): { vertices: Vertex[]; edges: Edge[]; faces: Face[] } {
+  console.log(`Creating torus geometry: radius=${radius}, tubeRadius=${tubeRadius}, segments=${radialSegments}x${tubularSegments}`)
+
+  const vertices: Vertex[] = []
+  const faces: Face[] = []
+
+  // Generate vertices
+  for (let i = 0; i <= radialSegments; i++) {
+    const u = i / radialSegments * Math.PI * 2
+    
+    for (let j = 0; j <= tubularSegments; j++) {
+      const v = j / tubularSegments * Math.PI * 2
+      
+      const x = (radius + tubeRadius * Math.cos(v)) * Math.cos(u)
+      const y = (radius + tubeRadius * Math.cos(v)) * Math.sin(u)
+      const z = tubeRadius * Math.sin(v)
+      
+      vertices.push({
+        id: generateId(),
+        position: { x, y, z },
+        selected: false,
+        normal: { 
+          x: Math.cos(v) * Math.cos(u), 
+          y: Math.cos(v) * Math.sin(u), 
+          z: Math.sin(v) 
+        },
+      })
+    }
+  }
+
+  // Generate faces
+  for (let i = 0; i < radialSegments; i++) {
+    for (let j = 0; j < tubularSegments; j++) {
+      const a = i * (tubularSegments + 1) + j
+      const b = (i + 1) * (tubularSegments + 1) + j
+      const c = (i + 1) * (tubularSegments + 1) + j + 1
+      const d = i * (tubularSegments + 1) + j + 1
+      
+      faces.push({
+        id: generateId(),
+        vertexIds: [vertices[a].id, vertices[b].id, vertices[c].id, vertices[d].id],
+        selected: false,
+      })
+    }
+  }
+
+  // Calculate normals for faces
+  faces.forEach((face) => {
+    face.normal = calculateFaceNormal(vertices, face)
+  })
+
+  const edges = generateEdgesFromFaces(vertices, faces)
+
+  console.log(`Torus geometry created: ${vertices.length} vertices, ${edges.length} edges, ${faces.length} faces`)
+  return { vertices, edges, faces }
+}
+
+export function createHelixGeometry(
+  radius = 0.5,
+  height = 2,
+  turns = 3,
+  radialSegments = 8,
+  heightSegments = 32,
+): { vertices: Vertex[]; edges: Edge[]; faces: Face[] } {
+  console.log(`Creating helix geometry: radius=${radius}, height=${height}, turns=${turns}, segments=${radialSegments}x${heightSegments}`)
+
+  const vertices: Vertex[] = []
+  const faces: Face[] = []
+
+  // Generate vertices along the helix path
+  for (let i = 0; i <= heightSegments; i++) {
+    const t = i / heightSegments
+    const angle = t * turns * Math.PI * 2
+    const y = t * height - height / 2
+    
+    // Create a circle of vertices at this height
+    for (let j = 0; j <= radialSegments; j++) {
+      const circleAngle = (j / radialSegments) * Math.PI * 2
+      const x = radius * Math.cos(angle + circleAngle)
+      const z = radius * Math.sin(angle + circleAngle)
+      
+      vertices.push({
+        id: generateId(),
+        position: { x, y, z },
+        selected: false,
+      })
+    }
+  }
+
+  // Generate faces
+  for (let i = 0; i < heightSegments; i++) {
+    for (let j = 0; j < radialSegments; j++) {
+      const a = i * (radialSegments + 1) + j
+      const b = (i + 1) * (radialSegments + 1) + j
+      const c = (i + 1) * (radialSegments + 1) + j + 1
+      const d = i * (radialSegments + 1) + j + 1
+      
+      faces.push({
+        id: generateId(),
+        vertexIds: [vertices[a].id, vertices[b].id, vertices[c].id, vertices[d].id],
+        selected: false,
+      })
+    }
+  }
+
+  // Calculate normals for faces
+  faces.forEach((face) => {
+    face.normal = calculateFaceNormal(vertices, face)
+  })
+
+  const edges = generateEdgesFromFaces(vertices, faces)
+
+  console.log(`Helix geometry created: ${vertices.length} vertices, ${edges.length} edges, ${faces.length} faces`)
+  return { vertices, edges, faces }
+}

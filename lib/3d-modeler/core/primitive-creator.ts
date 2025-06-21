@@ -1,5 +1,5 @@
 import type { ModelerObject, ObjectType, Material } from "./types"
-import { createBoxGeometry, createSphereGeometry, createCylinderGeometry, createPlaneGeometry } from "./geometry-utils"
+import { createBoxGeometry, createSphereGeometry, createCylinderGeometry, createPlaneGeometry, createPyramidGeometry, createPrismGeometry, createTorusGeometry, createHelixGeometry } from "./geometry-utils"
 
 // Generate a UUID (simple version for browser compatibility)
 function generateId(): string {
@@ -22,6 +22,17 @@ export interface PrimitiveOptions {
   radiusTop?: number
   radiusBottom?: number
   radialSegments?: number
+
+  // Pyramid/Prism options
+  baseRadius?: number
+  baseSegments?: number
+
+  // Torus options
+  tubeRadius?: number
+  tubularSegments?: number
+
+  // Helix options
+  turns?: number
 
   // General options
   color?: string
@@ -82,6 +93,37 @@ export class PrimitiveCreator {
             options.height || 1,
             options.radialSegments || 16,
             options.heightSegments || 1,
+          )
+          break
+        case "pyramid":
+          geometry = createPyramidGeometry(
+            options.baseRadius || 0.5,
+            options.height || 1,
+            options.baseSegments || 3,
+          )
+          break
+        case "prism":
+          geometry = createPrismGeometry(
+            options.baseRadius || 0.5,
+            options.height || 1,
+            options.baseSegments || 6,
+          )
+          break
+        case "torus":
+          geometry = createTorusGeometry(
+            options.radius || 0.5,
+            options.tubeRadius || 0.2,
+            options.radialSegments || 16,
+            options.tubularSegments || 32,
+          )
+          break
+        case "helix":
+          geometry = createHelixGeometry(
+            options.radius || 0.5,
+            options.height || 2,
+            options.turns || 3,
+            options.radialSegments || 8,
+            options.heightSegments || 32,
           )
           break
         default:
@@ -149,5 +191,21 @@ export class PrimitiveCreator {
 
   static createCone(options: PrimitiveOptions = {}): ModelerObject {
     return this.createPrimitive("cone", options)
+  }
+
+  static createPyramid(options: PrimitiveOptions = {}): ModelerObject {
+    return this.createPrimitive("pyramid", options)
+  }
+
+  static createPrism(options: PrimitiveOptions = {}): ModelerObject {
+    return this.createPrimitive("prism", options)
+  }
+
+  static createTorus(options: PrimitiveOptions = {}): ModelerObject {
+    return this.createPrimitive("torus", options)
+  }
+
+  static createHelix(options: PrimitiveOptions = {}): ModelerObject {
+    return this.createPrimitive("helix", options)
   }
 }

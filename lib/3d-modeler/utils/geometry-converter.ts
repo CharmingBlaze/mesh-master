@@ -72,7 +72,7 @@ export function convertToBufferGeometry(object: ModelerObject): BufferGeometry {
       if (typeof vertex.position.x === 'number' && 
           typeof vertex.position.y === 'number' && 
           typeof vertex.position.z === 'number') {
-        vertexMap.set(vertex.id, vertex)
+    vertexMap.set(vertex.id, vertex)
       } else {
         console.warn(`Vertex ${vertex.id} has invalid position data`)
       }
@@ -109,9 +109,9 @@ export function convertToBufferGeometry(object: ModelerObject): BufferGeometry {
           if (typeof normal.x === 'number' && 
               typeof normal.y === 'number' && 
               typeof normal.z === 'number') {
-            for (let j = 0; j < 3; j++) {
-              normals.push(normal.x, normal.y, normal.z)
-            }
+          for (let j = 0; j < 3; j++) {
+            normals.push(normal.x, normal.y, normal.z)
+          }
           } else {
             // Default normal if invalid
             for (let j = 0; j < 3; j++) {

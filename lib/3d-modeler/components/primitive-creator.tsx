@@ -39,6 +39,10 @@ export function PrimitiveCreator({ onCreatePrimitive, className }: PrimitiveCrea
             <option value="cylinder">Cylinder</option>
             <option value="plane">Plane</option>
             <option value="cone">Cone</option>
+            <option value="pyramid">Pyramid</option>
+            <option value="prism">Prism</option>
+            <option value="torus">Torus</option>
+            <option value="helix">Helix</option>
           </select>
         </div>
 
@@ -167,6 +171,171 @@ export function PrimitiveCreator({ onCreatePrimitive, className }: PrimitiveCrea
                 min="0.1"
                 value={options.height || 1}
                 onChange={(e) => updateOption("height", Number.parseFloat(e.target.value) || 1)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+          </div>
+        )}
+
+        {(primitiveType === "pyramid" || primitiveType === "prism") && (
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label htmlFor="baseRadius" className="block text-sm font-medium mb-1">
+                Base Radius
+              </label>
+              <input
+                id="baseRadius"
+                type="number"
+                step="0.1"
+                min="0.1"
+                value={options.baseRadius || 0.5}
+                onChange={(e) => updateOption("baseRadius", Number.parseFloat(e.target.value) || 0.5)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="height" className="block text-sm font-medium mb-1">
+                Height
+              </label>
+              <input
+                id="height"
+                type="number"
+                step="0.1"
+                min="0.1"
+                value={options.height || 1}
+                onChange={(e) => updateOption("height", Number.parseFloat(e.target.value) || 1)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="baseSegments" className="block text-sm font-medium mb-1">
+                Base Segments
+              </label>
+              <input
+                id="baseSegments"
+                type="number"
+                min="3"
+                value={options.baseSegments || (primitiveType === "pyramid" ? 3 : 6)}
+                onChange={(e) => updateOption("baseSegments", Number.parseInt(e.target.value) || (primitiveType === "pyramid" ? 3 : 6))}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+          </div>
+        )}
+
+        {primitiveType === "torus" && (
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="radius" className="block text-sm font-medium mb-1">
+                Radius
+              </label>
+              <input
+                id="radius"
+                type="number"
+                step="0.1"
+                min="0.1"
+                value={options.radius || 0.5}
+                onChange={(e) => updateOption("radius", Number.parseFloat(e.target.value) || 0.5)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="tubeRadius" className="block text-sm font-medium mb-1">
+                Tube Radius
+              </label>
+              <input
+                id="tubeRadius"
+                type="number"
+                step="0.1"
+                min="0.1"
+                value={options.tubeRadius || 0.2}
+                onChange={(e) => updateOption("tubeRadius", Number.parseFloat(e.target.value) || 0.2)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="radialSegments" className="block text-sm font-medium mb-1">
+                Radial Segments
+              </label>
+              <input
+                id="radialSegments"
+                type="number"
+                min="3"
+                value={options.radialSegments || 16}
+                onChange={(e) => updateOption("radialSegments", Number.parseInt(e.target.value) || 16)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="tubularSegments" className="block text-sm font-medium mb-1">
+                Tubular Segments
+              </label>
+              <input
+                id="tubularSegments"
+                type="number"
+                min="3"
+                value={options.tubularSegments || 32}
+                onChange={(e) => updateOption("tubularSegments", Number.parseInt(e.target.value) || 32)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+          </div>
+        )}
+
+        {primitiveType === "helix" && (
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="radius" className="block text-sm font-medium mb-1">
+                Radius
+              </label>
+              <input
+                id="radius"
+                type="number"
+                step="0.1"
+                min="0.1"
+                value={options.radius || 0.5}
+                onChange={(e) => updateOption("radius", Number.parseFloat(e.target.value) || 0.5)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="height" className="block text-sm font-medium mb-1">
+                Height
+              </label>
+              <input
+                id="height"
+                type="number"
+                step="0.1"
+                min="0.1"
+                value={options.height || 2}
+                onChange={(e) => updateOption("height", Number.parseFloat(e.target.value) || 2)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="turns" className="block text-sm font-medium mb-1">
+                Turns
+              </label>
+              <input
+                id="turns"
+                type="number"
+                step="0.5"
+                min="0.5"
+                value={options.turns || 3}
+                onChange={(e) => updateOption("turns", Number.parseFloat(e.target.value) || 3)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div>
+              <label htmlFor="radialSegments" className="block text-sm font-medium mb-1">
+                Radial Segments
+              </label>
+              <input
+                id="radialSegments"
+                type="number"
+                min="3"
+                value={options.radialSegments || 8}
+                onChange={(e) => updateOption("radialSegments", Number.parseInt(e.target.value) || 8)}
                 className="w-full p-2 border rounded"
               />
             </div>

@@ -220,21 +220,21 @@ export class FiberConverter {
     // Set geometry attributes if we have valid data
     if (positions.length > 0) {
       // Set required attributes
-      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3))
-      geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3))
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3))
+    geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3))
 
       // Set optional attributes if available
-      if (uvs.length > 0) {
-        geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2))
-      }
+    if (uvs.length > 0) {
+      geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2))
+    }
 
-      if (indices.length > 0) {
-        geometry.setIndex(indices)
-      }
+    if (indices.length > 0) {
+      geometry.setIndex(indices)
+    }
 
       // Compute bounding volumes for efficient rendering
-      geometry.computeBoundingBox()
-      geometry.computeBoundingSphere()
+    geometry.computeBoundingBox()
+    geometry.computeBoundingSphere()
     } else {
       console.warn('No valid geometry data to create mesh')
     }
@@ -291,6 +291,41 @@ export class FiberConverter {
           height: props.args?.[1] || 1,
           radialSegments: props.args?.[2] || 32,
           heightSegments: props.args?.[3] || 1,
+          color: props.color || "#4a90e2",
+        })
+
+      case "pyramidGeometry":
+        return PrimitiveCreator.createPrimitive("pyramid", {
+          baseRadius: props.args?.[0] || 0.5,
+          height: props.args?.[1] || 1,
+          baseSegments: props.args?.[2] || 3,
+          color: props.color || "#4a90e2",
+        })
+
+      case "prismGeometry":
+        return PrimitiveCreator.createPrimitive("prism", {
+          baseRadius: props.args?.[0] || 0.5,
+          height: props.args?.[1] || 1,
+          baseSegments: props.args?.[2] || 6,
+          color: props.color || "#4a90e2",
+        })
+
+      case "torusGeometry":
+        return PrimitiveCreator.createPrimitive("torus", {
+          radius: props.args?.[0] || 0.5,
+          tubeRadius: props.args?.[1] || 0.2,
+          radialSegments: props.args?.[2] || 16,
+          tubularSegments: props.args?.[3] || 32,
+          color: props.color || "#4a90e2",
+        })
+
+      case "helixGeometry":
+        return PrimitiveCreator.createPrimitive("helix", {
+          radius: props.args?.[0] || 0.5,
+          height: props.args?.[1] || 2,
+          turns: props.args?.[2] || 3,
+          radialSegments: props.args?.[3] || 8,
+          heightSegments: props.args?.[4] || 32,
           color: props.color || "#4a90e2",
         })
 

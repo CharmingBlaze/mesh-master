@@ -26,6 +26,7 @@ import {
   Undo,
   Redo,
   Layers,
+  Circle,
 } from "lucide-react"
 import { useModeler } from "./modeler-provider"
 import type { ObjectType, TransformMode, EditMode } from "../core/types"
@@ -320,6 +321,42 @@ export function ModelerUI({
                       <Triangle className="w-4 h-4" />
                       <span className="text-xs">Cone</span>
                     </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleAddPrimitive("pyramid")}
+                      disabled={isCreating}
+                      className="h-12 flex flex-col gap-1"
+                    >
+                      <Triangle className="w-4 h-4" />
+                      <span className="text-xs">Pyramid</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleAddPrimitive("prism")}
+                      disabled={isCreating}
+                      className="h-12 flex flex-col gap-1"
+                    >
+                      <Box className="w-4 h-4" />
+                      <span className="text-xs">Prism</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleAddPrimitive("torus")}
+                      disabled={isCreating}
+                      className="h-12 flex flex-col gap-1"
+                    >
+                      <Circle className="w-4 h-4" />
+                      <span className="text-xs">Torus</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleAddPrimitive("helix")}
+                      disabled={isCreating}
+                      className="h-12 flex flex-col gap-1"
+                    >
+                      <RotateCw className="w-4 h-4" />
+                      <span className="text-xs">Helix</span>
+                    </Button>
                   </div>
 
                   <Separator />
@@ -368,6 +405,10 @@ export function ModelerUI({
                                   {object.type === "cylinder" && <Cylinder className="w-4 h-4" />}
                                   {object.type === "plane" && <Square className="w-4 h-4" />}
                                   {object.type === "cone" && <Triangle className="w-4 h-4" />}
+                                  {object.type === "pyramid" && <Triangle className="w-4 h-4" />}
+                                  {object.type === "prism" && <Box className="w-4 h-4" />}
+                                  {object.type === "torus" && <Circle className="w-4 h-4" />}
+                                  {object.type === "helix" && <RotateCw className="w-4 h-4" />}
                                 </div>
                                 <div className="min-w-0">
                                   <p className="text-sm font-medium truncate">{object.name}</p>
