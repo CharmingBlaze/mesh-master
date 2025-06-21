@@ -1,0 +1,8 @@
+{
+  "entryPoints": ["lib/mesh/EditableMesh.ts"],
+  "out": "docs",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeExternals": true,
+  "tsconfig": "tsconfig.typedoc.json"
+} 
